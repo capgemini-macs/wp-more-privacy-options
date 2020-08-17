@@ -457,9 +457,10 @@ class DS_More_Privacy_Options {
 		} else {
 				if ( is_user_logged_in() ) {
 					$this->ds_login_header(); ?>
-					<form name="loginform" id="loginform" />
+					<form name="loginform" id="loginform">
 						<p><a href="<?php if (!is_user_logged_in()) { echo wp_login_url(); } else { echo network_home_url(); } ?>"><?php echo __('Click', $this->l10n_prefix).'</a>'. __(' to continue', $this->l10n_prefix); ?>.</p>
 							<?php $this->registered_members_login_message (); ?>
+							<?php wp_nonce_field( 'registered_members_login', 'nonce_registered_members_field' ); ?>
 					</form>
 				</div>
 			</body>
@@ -478,6 +479,16 @@ class DS_More_Privacy_Options {
 	}
 
 	function registered_members_login_message() {
+
+		// Check nonces
+if (
+	! isset( $_GET['nonce_registered_members_field'] ) ||
+	! wp_verify_nonce( sanitize_text_field( $_GET['nonce_registered_members_field'] ), 'registered_members_login' )
+) {
+	return;
+}
+
+
 		global $current_site;
 		echo '<p>';
 		if(!is_user_logged_in()) {
@@ -515,9 +526,10 @@ class DS_More_Privacy_Options {
 
 		if (( is_user_logged_in() )) {
 			$this->ds_login_header(); ?>
-						<form name="loginform" id="loginform" />
+						<form name="loginform" id="loginform">
 							<?php $this->registered_admins_login_message (); ?>
 							<p><?php echo __('Visit', $this->l10n_prefix); ?> <a href="<?php echo network_home_url(); ?>"><?php echo network_home_url(); ?></a> <?php __('to continue', $this->l10n_prefix); ?>.</p>
+							<?php wp_nonce_field( 'registered_admin_login', 'nonce_registered_admin_field' ); ?>
 						</form>
 					</div>
 				</body>
@@ -535,6 +547,14 @@ class DS_More_Privacy_Options {
 	}
 
 	function registered_admins_login_message() {
+
+		if (
+			! isset( $_GET['nonce_registered_admin_field'] ) ||
+			! wp_verify_nonce( sanitize_text_field( $_GET['nonce_registered_admin_field'] ), 'registered_admin_login' )
+		) {
+			return;
+		}
+
 		echo '<p>';
 		echo __('Visible only to administrators of this site', $this->l10n_prefix);
 		echo '</p><br/>';
