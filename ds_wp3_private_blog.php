@@ -377,6 +377,9 @@ class DS_More_Privacy_Options {
 
 
 		if ( !is_user_logged_in() ) {
+            if (apply_filters('ds_more_private_options_ignore', false)) {
+                return;
+            }
 			if( is_feed() ) {
 				$this->ds_feed_login();
 			} else {
