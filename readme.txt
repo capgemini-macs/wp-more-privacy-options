@@ -69,3 +69,6 @@ This section describes how to install the plugin and get it working.
 == Upgrade Notice ==
 = 4.6 =
 * WP 4.6 tests OK, cleanup php notices
+
+== Filters ==
+ds_more_private_options_ignore - Use to ignore this plugin on pages which must be visible for not logged users.
